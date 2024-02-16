@@ -4,8 +4,9 @@
 
 int main()
 {
-    View view;
-    Model model(view);
+    View* view = View::get("text");
+
+    Model model(*view);
     Control control(model);
     control.get_user_input();
 

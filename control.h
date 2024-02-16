@@ -13,13 +13,7 @@ class Control
     Control(Model& model_)
         : model(model_)
     {
-
     }
 
-    void get_user_input()
-    {
-        char buff[length_game_name] = {};
-        std::cin >> buff;
-        model.set_name(buff);
-    }
+    void get_user_input();
 };
