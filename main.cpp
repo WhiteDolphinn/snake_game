@@ -1,6 +1,6 @@
-#include "view.h"
-#include "game.h"
-#include "control.h"
+#include "view.hpp"
+#include "game.hpp"
+#include "control.hpp"
 
 int main()
 {

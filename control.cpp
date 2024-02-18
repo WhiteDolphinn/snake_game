@@ -1,4 +1,4 @@
-#include "control.h"
+#include "control.hpp"
 
 void Control::get_user_input()
 {

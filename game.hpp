@@ -1,6 +1,6 @@
 #pragma once
 #include <string.h>
-#include "view.h"
+#include "view.hpp"
 
 const int length_game_name = 15;
 

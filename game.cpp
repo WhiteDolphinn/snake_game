@@ -1,4 +1,4 @@
-#include "game.h"
+#include "game.hpp"
 
 void Model::set_name(char* buff)
 {

@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-#include "game.h"
+#include "game.hpp"
 
 class Control
 {
