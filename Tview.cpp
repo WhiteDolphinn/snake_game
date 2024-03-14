@@ -19,19 +19,42 @@ void TView::draw()
     int win_xsize = wins.ws_row;
     int win_ysize = wins.ws_col;
 
-    gotoxy(win_xsize/2, win_ysize/2);
-
-    print_game_name("snake");
-    std::cout << std::flush;
-
     draw_wall('#', 0, 0, win_xsize, 0);
     draw_wall('#', 0, win_ysize, win_xsize, win_ysize);
     draw_wall('#', 0, 0, 0, win_ysize);
     draw_wall('#', win_xsize, 0, win_xsize, win_ysize);
 
+    gotoxy(0, win_ysize/2);
+    print_game_name("snake");
+    std::cout << std::flush;
 
     gotoxy(win_xsize, win_ysize);
     std::cout << std::flush;
+}
+
+void TView::draw(std::list<Rabbit>& rabbits)
+{
+    draw();
+
+    for(const auto& rabbit: rabbits)
+        draw_rabbit(rabbit);
+
+    struct winsize wins;
+    ioctl(0, TIOCGWINSZ, &wins);
+    
+    int win_xsize = wins.ws_row;
+    int win_ysize = wins.ws_col;
+
+
+    gotoxy(win_xsize, win_ysize);
+    std::cout << std::flush;
+
+    /*for(auto it = rabbits.begin(); it != rabbits.end(); ++it)
+    {
+        std::cout << (*it)->xy.first << (*it)->xy.second;
+        draw_rabbit(*it);
+    }*/
+        
 }
 
 void TView::draw_wall(char symbol, int start_x, int start_y, int end_x, int end_y)
@@ -71,4 +94,17 @@ void TView::gotoxy(int x, int y)
 void TView::print_game_name(std::string game_name)
 {
     std::cout << "Game: " << game_name;
+}
+
+void TView::draw_rabbit(const Rabbit& rabbit)
+{
+    gotoxy(rabbit.xy.first, rabbit.xy.second);
+    std::cout << "r";
+    //gotoxy(20, 20);
+    //std::cout << rabbit.xy.first << " , " << rabbit.xy.second;
+}
+
+void TView::draw_snake(const Snake& snake)
+{
+    return;
 }

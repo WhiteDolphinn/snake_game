@@ -6,4 +6,5 @@ class GView : public View
     public:
     virtual void print_game_name(std::string game_name);
     virtual void draw();
+    virtual void draw(std::list<Rabbit>& rabbits);
 };
