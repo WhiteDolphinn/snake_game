@@ -10,13 +10,11 @@ using coord = std::pair<int, int>;
 
 class Snake
 {
-    private:
+    public:
     int length;
     coord head;
     coord tail;
     std::list<coord> body;
-
-    public:
 };
 
 class Rabbit
@@ -29,10 +27,13 @@ class Rabbit
 class View
 {
     public:
+    coord win_size = {0, 0};
     static View* view;
     static View* get(std::string s = "text");
+    View();
     virtual ~View();
     virtual void print_game_name(std::string game_name) = 0;
     virtual void draw() = 0;
-    virtual void draw(std::list<Rabbit>& rabbits) = 0;
+    virtual void draw(std::list<Rabbit>& rabbits, std::list<Snake>& snakes) = 0;
+    virtual void bye_print() = 0;
 };

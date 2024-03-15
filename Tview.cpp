@@ -16,37 +16,48 @@ void TView::draw()
     struct winsize wins;
     ioctl(0, TIOCGWINSZ, &wins);
 
-    int win_xsize = wins.ws_row;
-    int win_ysize = wins.ws_col;
+    //int win_xsize = wins.ws_row;
+    //int win_ysize = wins.ws_col;
+    win_size.first = wins.ws_row;
+    win_size.second = wins.ws_col;
 
-    draw_wall('#', 0, 0, win_xsize, 0);
+    /*draw_wall('#', 0, 0, win_xsize, 0);
     draw_wall('#', 0, win_ysize, win_xsize, win_ysize);
     draw_wall('#', 0, 0, 0, win_ysize);
-    draw_wall('#', win_xsize, 0, win_xsize, win_ysize);
+    draw_wall('#', win_xsize, 0, win_xsize, win_ysize);*/
 
-    gotoxy(0, win_ysize/2);
+    draw_wall('#', 0, 0, win_size.first, 0);
+    draw_wall('#', 0, win_size.second, win_size.first, win_size.second);
+    draw_wall('#', 0, 0, 0, win_size.second);
+    draw_wall('#', win_size.first, 0, win_size.first, win_size.second);
+
+
+    gotoxy(1, win_size.second/2);
     print_game_name("snake");
     std::cout << std::flush;
 
-    gotoxy(win_xsize, win_ysize);
+    gotoxy(win_size.first, win_size.second);
     std::cout << std::flush;
 }
 
-void TView::draw(std::list<Rabbit>& rabbits)
+void TView::draw(std::list<Rabbit>& rabbits, std::list<Snake>& snakes)
 {
     draw();
 
     for(const auto& rabbit: rabbits)
         draw_rabbit(rabbit);
 
-    struct winsize wins;
+    for(const auto& snake: snakes)
+        draw_snake(snake);
+
+    /*struct winsize wins;
     ioctl(0, TIOCGWINSZ, &wins);
     
     int win_xsize = wins.ws_row;
-    int win_ysize = wins.ws_col;
+    int win_ysize = wins.ws_col;*/
 
 
-    gotoxy(win_xsize, win_ysize);
+    gotoxy(win_size.first, win_size.second);
     std::cout << std::flush;
 
     /*for(auto it = rabbits.begin(); it != rabbits.end(); ++it)
@@ -106,5 +117,24 @@ void TView::draw_rabbit(const Rabbit& rabbit)
 
 void TView::draw_snake(const Snake& snake)
 {
+    gotoxy(snake.head.first, snake.head.second);
+    std::cout << "O";
+
+    for(const auto& part: snake.body)
+    {
+        gotoxy(part.first, part.second);
+        std::cout << "o";
+    }
+    
+    gotoxy(snake.tail.first, snake.tail.second);
+    std::cout << "*";
+
     return;
+}
+
+void TView::bye_print()
+{
+    printf("\033[H\033[J");
+    printf("\033[%d;%dH Good bye!\n", win_size.first/2, win_size.second/2);
+    exit(0);
 }
