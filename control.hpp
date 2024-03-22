@@ -5,15 +5,13 @@
 class Control
 {
     private:
-
     Model& model;
+
 
     public:
 
-    Control(Model& model_)
-        : model(model_)
-    {
-    }
-
+    Control(Model& model_);
     void get_user_input();
+    void key_pressed(int key);
+
 };

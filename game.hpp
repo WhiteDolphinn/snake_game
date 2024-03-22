@@ -8,21 +8,21 @@
 
 const int length_game_name = 15;
 const int num_of_rabbits = 5;
-
+const int FPS = 5;
 
 class Model
 {
     private:
-    View& view;
     char game_name[length_game_name] = {};
     void generate_rabbits();
     void generate_snakes();
     void update();
 
-    std::list<Rabbit> rabbits;
-    std::list<Snake> snakes;
 
     public:
+    View& view;
+    std::list<Rabbit> rabbits;
+    std::list<Snake> snakes;
 
     Model(View& view_)
     : view(view_)
@@ -32,4 +32,12 @@ class Model
     }
 
     void set_name(char* buff);
+};
+
+enum direction
+{
+    UP = 1,
+    DOWN = 2,
+    RIGHT = 3,
+    LEFT = 4,
 };

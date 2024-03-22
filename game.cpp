@@ -16,7 +16,7 @@ void Model::set_name(char* buff)
     for(int i = 0; i < 1000; i++)
     {
         view.draw(rabbits, snakes);
-        usleep(1000000/30);
+        usleep(1000000/FPS);
         update();
     }
 
@@ -48,6 +48,7 @@ void Model::generate_snakes()
 {
     Snake snake;
     snake.length = 4;
+    snake.direction = RIGHT;
 
     snake.head.first = 20;
     snake.head.second = 12;
@@ -66,15 +67,39 @@ void Model::generate_snakes()
 
 void Model::update()
 {
+    static int i = 0;
     for(auto snake = snakes.begin(); snake != snakes.end(); snake++)
     {
-        (*snake).head.second++;
+        int prev_x = (*snake).head.first;
+        int prev_y = (*snake).head.second;
+        int prev_2x = 0;
+        int prev_2y = 0;
+
+        if(i%2)
+            (*snake).head.first++;
+        else
+            (*snake).head.second++;
+
         for(auto part = (*snake).body.begin(); part != (*snake).body.end(); part++)
         {
-            (*part).second++;
+            /*(*part).first++;
+            (*part).second++;*/
+
+            prev_2x = (*part).first;
+            prev_2y = (*part).second;
+
+            (*part).first = prev_x;
+            (*part).second = prev_y;
+
+            prev_x = prev_2x;
+            prev_y = prev_2y;
         }
 
-        (*snake).tail.second++;
+        //(*snake).tail.first++;
+        //(*snake).tail.second++;
         
+        (*snake).tail.first = prev_x;
+        (*snake).tail.second = prev_y;
+        i++;
     }
 }
