@@ -21,15 +21,8 @@ void TView::draw()
     struct winsize wins;
     ioctl(0, TIOCGWINSZ, &wins);
 
-    //int win_xsize = wins.ws_row;
-    //int win_ysize = wins.ws_col;
     win_size.first = wins.ws_row;
     win_size.second = wins.ws_col;
-
-    /*draw_wall('#', 0, 0, win_xsize, 0);
-    draw_wall('#', 0, win_ysize, win_xsize, win_ysize);
-    draw_wall('#', 0, 0, 0, win_ysize);
-    draw_wall('#', win_xsize, 0, win_xsize, win_ysize);*/
 
     draw_wall('#', 0, 0, win_size.first, 0);
     draw_wall('#', 0, win_size.second, win_size.first, win_size.second);
@@ -103,8 +96,6 @@ void TView::draw_rabbit(const Rabbit& rabbit)
 {
     gotoxy(rabbit.xy.first, rabbit.xy.second);
     std::cout << "r";
-    //gotoxy(20, 20);
-    //std::cout << rabbit.xy.first << " , " << rabbit.xy.second;
 }
 
 void TView::draw_snake(const Snake& snake)
@@ -136,21 +127,30 @@ void TView::mainloop()
     struct pollfd input = {0, POLLIN, 0};
     char buf[BUFSIZE] = "";
     
-
+    int timeout = 1000/FPS;
+    FILE* logfile = fopen("logfile2.txt", "w");
     for(int i = 0; i < 1000000; i++)
     {
-        int n = poll(&input, 1, 1000/FPS);
+        auto first_time = std::chrono::system_clock::now();
+        int n = poll(&input, 1, timeout);
+        auto second_time = std::chrono::system_clock::now();
+        int time = std::chrono::duration_cast<std::chrono::milliseconds>(second_time - first_time).count();
+        fprintf(logfile, "time:%d\n", time);
+        timeout -= time;
 
-        if(n == 0)
+        if(n == 0 || timeout <= 0)
         {
             for(const auto& ontime: ontimes)
                 {  
                     ontime();
+                    fprintf(logfile, "%d\n", timeout);
+                    timeout = 1000/FPS;
                 }
         }
 
         if(n == 1)
         {
+            
             int a = read(0, buf, sizeof(buf));
             static int direction = 0;
                 
@@ -159,36 +159,47 @@ void TView::mainloop()
                 switch (buf[i])
                 {
                 case 'w': case 'W':
+                if(direction != DOWN)
+                {
                     direction = UP;
+                }
                     break;
                 
                 case 's': case 'S':
+                if(direction != UP)
+                {
                     direction = DOWN;
+                }
                     break;
 
                 case 'a': case 'A':
+                if(direction != RIGHT)
+                {
                     direction = LEFT;
+                }
                     break;
 
                 case 'd': case 'D':
+                if(direction != LEFT)
+                {
                     direction = RIGHT;
+                }
                     break;
 
                 default:
                     break;
                 }
 
+                fprintf(logfile, "onkey\n");
                 for(const auto& onkey: onkeys)
                 {
                     onkey(direction);
                 }
             }
             buf[0] = '\0';
+            
         }
+        fflush(logfile);
     }
+    fclose(logfile);
 }
-
-/*TView::~TView()
-{
-    int a = tcsetattr(0, TCSANOW, &old_term);
-}*/

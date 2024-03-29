@@ -16,6 +16,7 @@ class Model
     char game_name[length_game_name] = {};
     void generate_rabbits();
     void generate_snakes();
+    void update_snake(std::list<Snake>::iterator snake);
 
 
     public:

@@ -13,3 +13,8 @@ all:
 
 valgrind:
 	valgrind --leak-check=full --log-file="logfile.out" --show-leak-kinds=all -v ./a.out
+
+depend:
+	@g++ main.cpp game.cpp view.cpp Tview.cpp Gview.cpp control.cpp $(A) -MM > .depend
+
+-include .depend

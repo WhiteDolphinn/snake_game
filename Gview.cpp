@@ -25,8 +25,3 @@ void GView::mainloop()
 {
     return;
 }
-
-/*GView::~GView()
-{
-    return;
-}*/

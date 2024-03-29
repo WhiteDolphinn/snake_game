@@ -8,7 +8,6 @@ class Control
     Model& model;
     Snake& snake;
 
-
     public:
 
     Control(Model& model_, Snake& snake_);
