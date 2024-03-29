@@ -9,6 +9,7 @@
 
 using coord = std::pair<int, int>;
 using keyfn = std::function<void(int)>;
+using timefn = std::function<void()>;
 
 
 class Snake
@@ -30,7 +31,7 @@ class Rabbit
 
 class View
 {
-    private:
+    protected:
     struct termios old_term;
     public:
     coord win_size = {0, 0};
@@ -43,7 +44,9 @@ class View
     virtual void draw(std::list<Rabbit>& rabbits, std::list<Snake>& snakes) = 0;
     virtual void bye_print() = 0;
 
-    void mainloop();
+    virtual void mainloop() = 0;
     void set_onkey(keyfn f);
+    void set_ontimes(timefn f);
     std::list<keyfn> onkeys;
+    std::list<timefn> ontimes;
 };

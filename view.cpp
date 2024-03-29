@@ -39,19 +39,18 @@ View::View()
 
 }
 
-View::~View()
-{
-    int a = tcsetattr(0, TCSANOW, &old_term);
-}
-
-void View::mainloop()
-{
-     
-}
-
 void View::set_onkey(keyfn f)
 {
     onkeys.push_back(f);
 }
 
+void View::set_ontimes(timefn f)
+{
+    ontimes.push_back(f);
+}
+
+View::~View()
+{
+    int a = tcsetattr(0, TCSANOW, &old_term);
+}
 

@@ -16,7 +16,6 @@ class Model
     char game_name[length_game_name] = {};
     void generate_rabbits();
     void generate_snakes();
-    void update();
 
 
     public:
@@ -32,6 +31,7 @@ class Model
     }
 
     void set_name(char* buff);
+    void update();
 };
 
 enum direction

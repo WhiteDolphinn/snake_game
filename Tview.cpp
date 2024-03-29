@@ -1,6 +1,11 @@
 #include "Tview.hpp"
 #include <termios.h>
 #include <sys/ioctl.h>
+#include <poll.h>
+#include <unistd.h>
+#include <chrono>
+
+const int BUFSIZE = 10;
 
 void TView::cls()
 {
@@ -50,21 +55,8 @@ void TView::draw(std::list<Rabbit>& rabbits, std::list<Snake>& snakes)
     for(const auto& snake: snakes)
         draw_snake(snake);
 
-    /*struct winsize wins;
-    ioctl(0, TIOCGWINSZ, &wins);
-    
-    int win_xsize = wins.ws_row;
-    int win_ysize = wins.ws_col;*/
-
-
     gotoxy(win_size.first, win_size.second);
     std::cout << std::flush;
-
-    /*for(auto it = rabbits.begin(); it != rabbits.end(); ++it)
-    {
-        std::cout << (*it)->xy.first << (*it)->xy.second;
-        draw_rabbit(*it);
-    }*/
         
 }
 
@@ -138,3 +130,65 @@ void TView::bye_print()
     printf("\033[%d;%dH Good bye!\n", win_size.first/2, win_size.second/2);
     exit(0);
 }
+
+void TView::mainloop()
+{
+    struct pollfd input = {0, POLLIN, 0};
+    char buf[BUFSIZE] = "";
+    
+
+    for(int i = 0; i < 1000000; i++)
+    {
+        int n = poll(&input, 1, 1000/FPS);
+
+        if(n == 0)
+        {
+            for(const auto& ontime: ontimes)
+                {  
+                    ontime();
+                }
+        }
+
+        if(n == 1)
+        {
+            int a = read(0, buf, sizeof(buf));
+            static int direction = 0;
+                
+            for(int i = 0; i < a; i++)
+            {
+                switch (buf[i])
+                {
+                case 'w': case 'W':
+                    direction = UP;
+                    break;
+                
+                case 's': case 'S':
+                    direction = DOWN;
+                    break;
+
+                case 'a': case 'A':
+                    direction = LEFT;
+                    break;
+
+                case 'd': case 'D':
+                    direction = RIGHT;
+                    break;
+
+                default:
+                    break;
+                }
+
+                for(const auto& onkey: onkeys)
+                {
+                    onkey(direction);
+                }
+            }
+            buf[0] = '\0';
+        }
+    }
+}
+
+/*TView::~TView()
+{
+    int a = tcsetattr(0, TCSANOW, &old_term);
+}*/

@@ -13,12 +13,14 @@ void Model::set_name(char* buff)
     //std::signal(SIGWINCH, view.draw(rabbits));
     //std::signal(SIGINT, view.bye_print());
 
-    for(int i = 0; i < 1000; i++)
+    /*for(int i = 0; i < 1000; i++)
     {
         view.draw(rabbits, snakes);
         usleep(1000000/FPS);
         update();
-    }
+    }*/
+
+    //view.draw(rabbits, snakes);
 
     //view.print_game_name(game_name);
 }
@@ -67,7 +69,6 @@ void Model::generate_snakes()
 
 void Model::update()
 {
-    static int i = 0;
     for(auto snake = snakes.begin(); snake != snakes.end(); snake++)
     {
         int prev_x = (*snake).head.first;
@@ -75,15 +76,31 @@ void Model::update()
         int prev_2x = 0;
         int prev_2y = 0;
 
-        if(i%2)
+        switch ((*snake).direction)
+        {
+        case UP:
+            (*snake).head.first--;
+            break;
+        
+        case DOWN:
             (*snake).head.first++;
-        else
+            break;
+
+        case LEFT:
+            (*snake).head.second--;
+            break;
+
+        case RIGHT:
             (*snake).head.second++;
+            break;
+        
+        default:
+            break;
+        }
 
         for(auto part = (*snake).body.begin(); part != (*snake).body.end(); part++)
         {
-            /*(*part).first++;
-            (*part).second++;*/
+ 
 
             prev_2x = (*part).first;
             prev_2y = (*part).second;
@@ -94,12 +111,9 @@ void Model::update()
             prev_x = prev_2x;
             prev_y = prev_2y;
         }
-
-        //(*snake).tail.first++;
-        //(*snake).tail.second++;
         
         (*snake).tail.first = prev_x;
         (*snake).tail.second = prev_y;
-        i++;
     }
+    view.draw(rabbits, snakes);
 }

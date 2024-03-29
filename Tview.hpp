@@ -25,4 +25,6 @@ class TView : public View
     virtual void draw();
     virtual void draw(std::list<Rabbit>& rabbits, std::list<Snake>& snakes);
     virtual void bye_print();
+    virtual void mainloop();
+    //virtual ~TView();
 };

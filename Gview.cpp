@@ -20,3 +20,13 @@ void GView::bye_print()
 {
     return;
 }
+
+void GView::mainloop()
+{
+    return;
+}
+
+/*GView::~GView()
+{
+    return;
+}*/

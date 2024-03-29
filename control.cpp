@@ -10,14 +10,14 @@ void Control::get_user_input()
 
 }
 
-Control::Control(Model& model_)
-        : model(model_)
+Control::Control(Model& model_, Snake& snake_)
+                : model(model_), snake(snake_)
 {
-
     auto f = std::bind(&Control::key_pressed, this, std::placeholders::_1);
-    //auto f2 = std::bind(&Control::);
     model.view.set_onkey(f);
-    //model.view.set_onkey(f2);
+    
+    auto f2 = std::bind(&Control::timer, this);
+    model.view.set_ontimes(f2);
 }
 
 void Control::key_pressed(int key)
@@ -45,6 +45,12 @@ void Control::key_pressed(int key)
         break;
     }*/
 
-    auto first_snake = model.snakes.begin();
-    (*first_snake).direction = key;
+    //auto first_snake = model.snakes.begin();
+    snake.direction = key;
+    model.update();
+}
+
+void Control::timer()
+{
+    model.update();
 }
