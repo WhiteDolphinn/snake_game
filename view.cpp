@@ -26,16 +26,6 @@ View::View()
     ioctl(0, TIOCGWINSZ, &wins);
     win_size.first = wins.ws_row;
     win_size.second = wins.ws_col;
-
-    struct termios term = {};
-    int a = tcgetattr(0, &term);
-    old_term = term;
-
-    term.c_lflag &= ~ECHO;
-    term.c_lflag &= ~ICANON;
-
-    a = tcsetattr(0, TCSANOW, &term);
-
 }
 
 void View::set_onkey(keyfn f)
@@ -50,6 +40,6 @@ void View::set_ontimes(timefn f)
 
 View::~View()
 {
-    int a = tcsetattr(0, TCSANOW, &old_term);
+    
 }
 

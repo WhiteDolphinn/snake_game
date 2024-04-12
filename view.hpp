@@ -58,6 +58,9 @@ class View
     virtual void draw(std::list<Rabbit>& rabbits, std::list<Snake>& snakes) = 0;
     virtual void bye_print() = 0;
 
+    virtual void draw_rabbit(const Rabbit& rabbit) = 0;
+    virtual void draw_snake(const Snake& snake) = 0;
+
     virtual void mainloop() = 0;
     void set_onkey(keyfn f);
     void set_ontimes(timefn f);

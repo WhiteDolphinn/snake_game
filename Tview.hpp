@@ -14,6 +14,8 @@ class TView : public View
     void draw_snake(const Snake& snake);
 
     public:
+    TView();
+    ~TView();
     virtual void print_game_name(std::string game_name);
     virtual void draw();
     virtual void draw(std::list<Rabbit>& rabbits, std::list<Snake>& snakes);
