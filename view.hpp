@@ -4,19 +4,33 @@
 #include <utility>
 #include <list>
 #include <termios.h> 
-#include <functional>   
+#include <functional> 
+#include <cstdlib>  
 //#include "game.hpp"
 
-using coord = std::pair<int, int>;
 using keyfn = std::function<void(int)>;
 using timefn = std::function<void()>;
 
+//using coord = std::pair<int, int>;
+
+struct coord: public std::pair<int, int>
+{
+    using base = std::pair<int, int>;
+    using base::base;
+
+    int dist(const coord& c)
+    {
+
+        return std::abs(c.first - first) + std::abs(c.second - second);
+    }
+};
 
 class Snake
 {
     public:
     int length;
     int direction = 1;
+    bool is_controlled = false;
     coord head;
     coord tail;
     std::list<coord> body;

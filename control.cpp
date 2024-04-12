@@ -19,11 +19,35 @@ Control::Control(Model& model_, Snake& snake_)
 
 void Control::key_pressed(int key)
 {
-    snake.direction = key;
-    //model.update();
+    if(snake.is_controlled)
+        snake.direction = key;
 }
 
 void Control::timer()
 {
-    model.update();
+    if(snake.is_controlled == false)
+    {
+
+        int min_distance = 10000;
+
+        int distance = 0;
+
+        for(const auto& rabbit: model.rabbits)
+        {
+            distance = snake.head.dist(rabbit.xy);
+
+            if(distance < min_distance)
+                min_distance = distance;
+        }
+
+        snake.direction = (min_distance % 4) + 1;
+        //snake.head = {5, 5};
+        
+        snake.direction = DOWN;
+        //std::cout << snake.direction << std::endl;
+        //model.update();
+    }
+
+    if(snake.is_controlled)
+        model.update();
 }

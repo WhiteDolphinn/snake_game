@@ -28,22 +28,24 @@ void Model::generate_rabbits()
 void Model::generate_snakes()
 {
     Snake snake;
-    snake.length = 4;
+    snake.length = 2;
     snake.direction = RIGHT;
+    snake.is_controlled = true;
 
-    snake.head.first = 20;
-    snake.head.second = 12;
-
-    coord xy1 = {20, 11};
-    snake.body.push_back(xy1);
-
-    xy1 = {20, 10};
-    snake.body.push_back(xy1);
-
-    snake.tail.first = 20;
-    snake.tail.second = 9;
+    snake.head = {3, 2};
+    snake.tail = {3, 1};
 
     snakes.push_back(snake);
+
+    snake.length = 2;
+    snake.direction = RIGHT;
+    snake.is_controlled = false;
+    
+    snake.head = {5, 50};
+    snake.tail = {4, 50};
+
+    snakes.push_back(snake);
+
 }
 
 void Model::update()
@@ -100,8 +102,6 @@ void Model::update_snake(std::list<Snake>::iterator snake)
 
     for(auto part = (*snake).body.begin(); part != (*snake).body.end(); part++)
     {
-
-
         prev_2x = (*part).first;
         prev_2y = (*part).second;
 

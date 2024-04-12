@@ -143,14 +143,12 @@ void TView::mainloop()
             for(const auto& ontime: ontimes)
                 {  
                     ontime();
-                    fprintf(logfile, "%d\n", timeout);
                     timeout = 1000/FPS;
                 }
         }
 
         if(n == 1)
-        {
-            
+        {  
             int a = read(0, buf, sizeof(buf));
             static int direction = 0;
                 
@@ -190,7 +188,6 @@ void TView::mainloop()
                     break;
                 }
 
-                fprintf(logfile, "onkey\n");
                 for(const auto& onkey: onkeys)
                 {
                     onkey(direction);

@@ -27,7 +27,6 @@ View::View()
     win_size.first = wins.ws_row;
     win_size.second = wins.ws_col;
 
-
     struct termios term = {};
     int a = tcgetattr(0, &term);
     old_term = term;
