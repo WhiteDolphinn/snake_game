@@ -9,7 +9,24 @@ GView::GView()
 {
     brick.setFillColor(sf::Color::Green);
     brick.setPosition(win_size.first*pixel_size/2, win_size.second*pixel_size/2);
-    window.setFramerateLimit(160);   
+
+    if(!rabbit_texture.loadFromFile("krolik4.png"))
+        std::cout<< "povialdjvldfbjkdf[p;bljkvp[;lgx;kbd;bvd;l]]" << std::endl;
+    rabbit.setTexture(rabbit_texture);
+
+    
+    if(!snake_body_texture.loadFromFile("snakebody.jpg"))
+        std::cout<< "povialdjvldfbjkdf[p;bljkvp[;lgx;kbd;bvd;l]]" << std::endl;
+    snake_body.setTexture(snake_body_texture);
+
+    if(!snake_head_texture.loadFromFile("snakehead.jpg"))
+        std::cout<< "povialdjvldfbjkdf[p;bljkvp[;lgx;kbd;bvd;l]]" << std::endl;
+    snake_head.setTexture(snake_head_texture);
+
+
+    //rabbit.set
+
+    window.setFramerateLimit(frame);   
 }
 
 GView::~GView()
@@ -28,7 +45,7 @@ void GView::draw()
         window.draw(brick);
     }
 
-        for(int i = 0; i < win_size.second; i++)
+    for(int i = 0; i < win_size.second; i++)
     {
         brick.setPosition(0, i*pixel_size);
         window.draw(brick);
@@ -41,7 +58,6 @@ void GView::draw()
 
 void GView::draw(std::list<Rabbit>& rabbits, std::list<Snake>& snakes)
 {
-    //usleep(100000);
     draw();
 
     for(const auto& rabbit: rabbits)
@@ -53,25 +69,25 @@ void GView::draw(std::list<Rabbit>& rabbits, std::list<Snake>& snakes)
     return;
 }
 
-void GView::draw_rabbit(const Rabbit& rabbit)
+void GView::draw_rabbit(const Rabbit& rabbit_)
 {
-    brick.setPosition(rabbit.xy.first*pixel_size, rabbit.xy.second*pixel_size);
-    window.draw(brick);
+    rabbit.setPosition(rabbit_.xy.first*pixel_size, rabbit_.xy.second*pixel_size);
+    window.draw(rabbit);
 }
 
 void GView::draw_snake(const Snake& snake)
 {
-    brick.setPosition(snake.head.first*pixel_size, snake.head.second*pixel_size);
-    window.draw(brick);
+    snake_head.setPosition(snake.head.first*pixel_size, snake.head.second*pixel_size);
+    window.draw(snake_head);
 
     for(const auto& part: snake.body)
     {
-        brick.setPosition(part.first*pixel_size, part.second*pixel_size);
-        window.draw(brick);
+        snake_body.setPosition(part.first*pixel_size, part.second*pixel_size);
+        window.draw(snake_body);
     }
     
-    brick.setPosition(snake.tail.first*pixel_size, snake.tail.second*pixel_size);
-    window.draw(brick);
+    snake_body.setPosition(snake.tail.first*pixel_size, snake.tail.second*pixel_size);
+    window.draw(snake_body);
 
     return;
 }
@@ -93,6 +109,9 @@ void GView::mainloop()
 
     while (window.isOpen())
     {
+        rabbit.setPosition(100, 100);
+        window.draw(rabbit);
+
         frame_number = (frame_number + 1) % frame;
 
         sf::Event event;
@@ -104,7 +123,7 @@ void GView::mainloop()
         }
 
         window.clear();
-        if(frame_number % 35 != 0)
+        if(frame_number % (frame/5) != 0)
         {
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
                 direction = UP;

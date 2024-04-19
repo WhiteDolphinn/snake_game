@@ -9,6 +9,16 @@ class GView : public View
     private:
     sf::RenderWindow window;
     sf::RectangleShape brick;
+
+    sf::Sprite rabbit;
+    sf::Texture rabbit_texture;
+
+    sf::Sprite snake_body;
+    sf::Texture snake_body_texture;
+
+    sf::Sprite snake_head;
+    sf::Texture snake_head_texture;
+
     unsigned frame = 160;
 
     public:
