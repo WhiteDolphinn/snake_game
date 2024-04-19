@@ -15,6 +15,7 @@ int main()
     control_bot.get_user_input();*/
 
     view->mainloop();
-
+    
+    delete view;
     return 0;
 }

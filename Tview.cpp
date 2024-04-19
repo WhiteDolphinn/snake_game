@@ -128,14 +128,14 @@ void TView::mainloop()
     char buf[BUFSIZE] = "";
     
     int timeout = 1000/FPS;
-    FILE* logfile = fopen("logfile2.txt", "w");
+    //FILE* logfile = fopen("logfile2.txt", "w");
     for(int i = 0; i < 1000000; i++)
     {
         auto first_time = std::chrono::system_clock::now();
         int n = poll(&input, 1, timeout);
         auto second_time = std::chrono::system_clock::now();
         int time = std::chrono::duration_cast<std::chrono::milliseconds>(second_time - first_time).count();
-        fprintf(logfile, "time:%d\n", time);
+        //fprintf(logfile, "time:%d\n", time);
         timeout -= time;
 
         if(n == 0 || timeout <= 0)
@@ -156,36 +156,36 @@ void TView::mainloop()
             {
                 switch (buf[i])
                 {
-                case 'w': case 'W':
-                if(direction != DOWN)
-                {
-                    direction = UP;
-                }
-                    break;
-                
-                case 's': case 'S':
-                if(direction != UP)
-                {
-                    direction = DOWN;
-                }
-                    break;
+                    case 'w': case 'W':
+                    if(direction != DOWN)
+                    {
+                        direction = UP;
+                    }
+                        break;
+                    
+                    case 's': case 'S':
+                    if(direction != UP)
+                    {
+                        direction = DOWN;
+                    }
+                        break;
 
-                case 'a': case 'A':
-                if(direction != RIGHT)
-                {
-                    direction = LEFT;
-                }
-                    break;
+                    case 'a': case 'A':
+                    if(direction != RIGHT)
+                    {
+                        direction = LEFT;
+                    }
+                        break;
 
-                case 'd': case 'D':
-                if(direction != LEFT)
-                {
-                    direction = RIGHT;
-                }
-                    break;
+                    case 'd': case 'D':
+                    if(direction != LEFT)
+                    {
+                        direction = RIGHT;
+                    }
+                        break;
 
-                default:
-                    break;
+                    default:
+                        break;
                 }
 
                 for(const auto& onkey: onkeys)
@@ -196,9 +196,9 @@ void TView::mainloop()
             buf[0] = '\0';
             
         }
-        fflush(logfile);
+        //fflush(logfile);
     }
-    fclose(logfile);
+    //fclose(logfile);
 }
 
 TView::TView()
@@ -209,16 +209,17 @@ TView::TView()
     win_size.second = wins.ws_col;
 
     struct termios term = {};
-    int a = tcgetattr(0, &term);
+    tcgetattr(0, &term);
     old_term = term;
 
     term.c_lflag &= ~ECHO;
     term.c_lflag &= ~ICANON;
 
-    a = tcsetattr(0, TCSANOW, &term);
+    tcsetattr(0, TCSANOW, &term);
 }
 
 TView::~TView()
 {
-    int a = tcsetattr(0, TCSANOW, &old_term);
+    tcsetattr(0, TCSANOW, &old_term);
+    
 }

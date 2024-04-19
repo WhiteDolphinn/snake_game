@@ -15,6 +15,10 @@ Control::Control(Model& model_, Snake& snake_)
     
     auto f2 = std::bind(&Control::timer, this);
     model.view.set_ontimes(f2);
+
+    auto f3 = std::bind(&Control::draw_without_update, this);
+    model.view.set_draw_without_update(f3);
+
 }
 
 void Control::key_pressed(int key)
@@ -50,4 +54,9 @@ void Control::timer()
 
     if(snake.is_controlled)
         model.update();
+}
+
+void Control::draw_without_update()
+{
+    model.view.draw(model.rabbits, model.snakes);
 }

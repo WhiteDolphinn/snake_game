@@ -10,6 +10,7 @@
 
 using keyfn = std::function<void(int)>;
 using timefn = std::function<void()>;
+using drawfn = std::function<void()>;
 
 //using coord = std::pair<int, int>;
 
@@ -62,8 +63,12 @@ class View
     virtual void draw_snake(const Snake& snake) = 0;
 
     virtual void mainloop() = 0;
+
     void set_onkey(keyfn f);
     void set_ontimes(timefn f);
+    void set_draw_without_update(drawfn f);
+
     std::list<keyfn> onkeys;
     std::list<timefn> ontimes;
+    drawfn draw_without_update;
 };

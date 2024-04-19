@@ -38,6 +38,11 @@ void View::set_ontimes(timefn f)
     ontimes.push_back(f);
 }
 
+void View::set_draw_without_update(drawfn f)
+{
+    draw_without_update = f;
+}
+
 View::~View()
 {
     

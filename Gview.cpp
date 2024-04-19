@@ -5,11 +5,11 @@
 const int BUFSIZE = 10;
 
 GView::GView()
-        : window(sf::VideoMode(1600, 800), "Game: Snake"), brick(sf::Vector2f(10.f, 10.f))
+        : window(sf::VideoMode(win_size.first*pixel_size, win_size.second*pixel_size), "Game: Snake"), brick(sf::Vector2f(10.f, 10.f))
 {
     brick.setFillColor(sf::Color::Green);
-    brick.setPosition(800.f, 400.f);
-    window.setFramerateLimit(2);   
+    brick.setPosition(win_size.first*pixel_size/2, win_size.second*pixel_size/2);
+    window.setFramerateLimit(160);   
 }
 
 GView::~GView()
@@ -20,19 +20,19 @@ GView::~GView()
 void GView::draw()
 {
 
-    for(int i = 0; i < 1600/pixel_size; i++)
+    for(int i = 0; i < win_size.first; i++)
     {
         brick.setPosition(i*pixel_size, 0);
         window.draw(brick);
-        brick.setPosition(i*pixel_size, 800-pixel_size);
+        brick.setPosition(i*pixel_size, win_size.second*pixel_size-pixel_size);
         window.draw(brick);
     }
 
-        for(int i = 0; i < 800/pixel_size; i++)
+        for(int i = 0; i < win_size.second; i++)
     {
         brick.setPosition(0, i*pixel_size);
         window.draw(brick);
-        brick.setPosition(1600-pixel_size, i*pixel_size);
+        brick.setPosition(win_size.first*pixel_size-pixel_size, i*pixel_size);
         window.draw(brick);
     }
 
@@ -55,22 +55,22 @@ void GView::draw(std::list<Rabbit>& rabbits, std::list<Snake>& snakes)
 
 void GView::draw_rabbit(const Rabbit& rabbit)
 {
-    brick.setPosition(rabbit.xy.first*10, rabbit.xy.second*10);
+    brick.setPosition(rabbit.xy.first*pixel_size, rabbit.xy.second*pixel_size);
     window.draw(brick);
 }
 
 void GView::draw_snake(const Snake& snake)
 {
-    brick.setPosition(snake.head.first*10, snake.head.second*10);
+    brick.setPosition(snake.head.first*pixel_size, snake.head.second*pixel_size);
     window.draw(brick);
 
     for(const auto& part: snake.body)
     {
-        brick.setPosition(part.first*10, part.second*10);
+        brick.setPosition(part.first*pixel_size, part.second*pixel_size);
         window.draw(brick);
     }
     
-    brick.setPosition(snake.tail.first*10, snake.tail.second*10);
+    brick.setPosition(snake.tail.first*pixel_size, snake.tail.second*pixel_size);
     window.draw(brick);
 
     return;
@@ -78,7 +78,7 @@ void GView::draw_snake(const Snake& snake)
 
 void GView::print_game_name(std::string game_name)
 {
-    std::cout << "(GView)Game: " << game_name << std::endl  ;
+    std::cout << "(GView)Game: " << game_name << std::endl;
 }
 
 void GView::bye_print()
@@ -89,9 +89,12 @@ void GView::bye_print()
 void GView::mainloop()
 {
     int direction = 0;
+    int frame_number = 0;
 
     while (window.isOpen())
     {
+        frame_number = (frame_number + 1) % frame;
+
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -101,49 +104,33 @@ void GView::mainloop()
         }
 
         window.clear();
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+        if(frame_number % 35 != 0)
         {
-            direction = UP;
-            for(const auto& onkey: onkeys)
-            {
-                onkey(direction);
-            }
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-        {
-            direction = DOWN;
-            for(const auto& onkey: onkeys)
-            {
-                onkey(direction);
-            }
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-        {
-            direction = LEFT;
-            for(const auto& onkey: onkeys)
-            {
-                onkey(direction);
-            }
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-        {
-            direction = RIGHT;
-            for(const auto& onkey: onkeys)
-            {
-                onkey(direction);
-            }
-        }
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+                direction = UP;
 
-        for(const auto& ontime: ontimes)
-        {  
-            ontime();
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+                direction = DOWN;
+
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+                direction = LEFT;
+
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+                direction = RIGHT;
+
+            for(const auto& onkey: onkeys)
+                onkey(direction);
+
+            draw_without_update();
         }
-        
-        window.display();
+        else
+        {
+            for(const auto& ontime: ontimes)
+                ontime();
+        }
+            window.display();
 
     }
-
-    
 
     return;
 }

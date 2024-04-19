@@ -9,6 +9,7 @@ class GView : public View
     private:
     sf::RenderWindow window;
     sf::RectangleShape brick;
+    unsigned frame = 160;
 
     public:
     GView();

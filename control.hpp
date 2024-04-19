@@ -14,5 +14,6 @@ class Control
     void get_user_input();
     void key_pressed(int key);
     void timer();
+    void draw_without_update();
 
 };

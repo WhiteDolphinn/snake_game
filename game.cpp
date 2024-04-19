@@ -11,18 +11,18 @@ void Model::generate_rabbits()
     srand(time(NULL));
     Rabbit rabbit;
 
-    FILE* logfile = fopen("logfile.txt", "w");
+    //FILE* logfile = fopen("logfile.txt", "w");
 
     for(int i = 0; i < num_of_rabbits; i++)
     {   
         rabbit.xy.first = (rand() % (view.win_size.first-2))+2;
         rabbit.xy.second = (rand() % (view.win_size.second-2))+2;
         
-        fprintf(logfile, "%d %d %d\n", i, rabbit.xy.first, rabbit.xy.second);
+        //fprintf(logfile, "%d %d %d\n", i, rabbit.xy.first, rabbit.xy.second);
         rabbits.push_back(rabbit);
     }
 
-    fclose(logfile); 
+    //fclose(logfile); 
 }
 
 void Model::generate_snakes()
