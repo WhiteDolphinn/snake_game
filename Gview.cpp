@@ -19,7 +19,7 @@ GView::GView()
         std::cout<< "povialdjvldfbjkdf[p;bljkvp[;lgx;kbd;bvd;l]]" << std::endl;
     snake_body.setTexture(snake_body_texture);
 
-    if(!snake_head_texture.loadFromFile("snakehead.jpg"))
+    if(!snake_head_texture.loadFromFile("snakehead2.png"))
         std::cout<< "povialdjvldfbjkdf[p;bljkvp[;lgx;kbd;bvd;l]]" << std::endl;
     snake_head.setTexture(snake_head_texture);
 
@@ -71,22 +71,22 @@ void GView::draw(std::list<Rabbit>& rabbits, std::list<Snake>& snakes)
 
 void GView::draw_rabbit(const Rabbit& rabbit_)
 {
-    rabbit.setPosition(rabbit_.xy.first*pixel_size, rabbit_.xy.second*pixel_size);
+    rabbit.setPosition((rabbit_.xy.first-1)*pixel_size, (rabbit_.xy.second-1)*pixel_size);
     window.draw(rabbit);
 }
 
 void GView::draw_snake(const Snake& snake)
 {
-    snake_head.setPosition(snake.head.first*pixel_size, snake.head.second*pixel_size);
+    snake_head.setPosition((snake.head.first-1)*pixel_size, (snake.head.second-1)*pixel_size);
     window.draw(snake_head);
 
     for(const auto& part: snake.body)
     {
-        snake_body.setPosition(part.first*pixel_size, part.second*pixel_size);
+        snake_body.setPosition((part.first-1)*pixel_size, (part.second-1)*pixel_size);
         window.draw(snake_body);
     }
     
-    snake_body.setPosition(snake.tail.first*pixel_size, snake.tail.second*pixel_size);
+    snake_body.setPosition((snake.tail.first-1)*pixel_size, (snake.tail.second-1)*pixel_size);
     window.draw(snake_body);
 
     return;
@@ -109,9 +109,6 @@ void GView::mainloop()
 
     while (window.isOpen())
     {
-        rabbit.setPosition(100, 100);
-        window.draw(rabbit);
-
         frame_number = (frame_number + 1) % frame;
 
         sf::Event event;

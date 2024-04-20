@@ -37,14 +37,15 @@ void Model::generate_snakes()
 
     snakes.push_back(snake);
 
-    snake.length = 2;
-    snake.direction = RIGHT;
-    snake.is_controlled = false;
+    Snake snake2;
+    snake2.length = 2;
+    snake2.direction = RIGHT;
+    snake2.is_controlled = false;
     
-    snake.head = {5, 50};
-    snake.tail = {4, 50};
+    snake2.head = {5, 5};
+    snake2.tail = {4, 5};
 
-    snakes.push_back(snake);
+    snakes.push_back(snake2);
 
 }
 

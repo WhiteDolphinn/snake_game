@@ -33,6 +33,7 @@ void Control::timer()
     {
 
         int min_distance = 10000;
+        Rabbit min_rabbit;
 
         int distance = 0;
 
@@ -41,18 +42,46 @@ void Control::timer()
             distance = snake.head.dist(rabbit.xy);
 
             if(distance < min_distance)
+            {
                 min_distance = distance;
+                min_rabbit = rabbit;
+            }
+        }
+
+        /*std::cout << snake.head.first << " : " << snake.head.second << "\t";
+        std::cout << snake.direction << "\t";
+        std::cout << snake.head.first << " : " << snake.head.second << "\t";
+        std::cout << snake.direction << "\t";*/
+
+        if(snake.head.first != min_rabbit.xy.first)
+        {
+            if(snake.head.first < min_rabbit.xy.first)
+            {
+                snake.direction = DOWN; 
+            }
+            else
+            {
+                snake.direction = UP;
+            }
+        }
+        else
+        {
+            if(snake.head.second < min_rabbit.xy.second)
+            {
+                snake.direction = RIGHT; 
+            }
+            else
+            {
+                snake.direction = LEFT; 
+            }
         }
 
         snake.direction = (min_distance % 4) + 1;
-        //snake.head = {5, 5};
-        
-        snake.direction = DOWN;
+
         //std::cout << snake.direction << std::endl;
-        //model.update();
     }
 
-    if(snake.is_controlled)
+    if(snake.is_controlled)  
         model.update();
 }
 
