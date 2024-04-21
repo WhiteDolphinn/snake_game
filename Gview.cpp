@@ -5,7 +5,7 @@
 const int BUFSIZE = 10;
 
 GView::GView()
-        : window(sf::VideoMode(win_size.first*pixel_size, win_size.second*pixel_size), "Game: Snake"), brick(sf::Vector2f(10.f, 10.f))
+        : window(sf::VideoMode(win_size.first*pixel_size+200, win_size.second*pixel_size), "Game: Snake"), brick(sf::Vector2f(10.f, 10.f))
 {
     brick.setFillColor(sf::Color::Green);
     brick.setPosition(win_size.first*pixel_size/2, win_size.second*pixel_size/2);
@@ -23,8 +23,15 @@ GView::GView()
         std::cout<< "povialdjvldfbjkdf[p;bljkvp[;lgx;kbd;bvd;l]]" << std::endl;
     snake_head.setTexture(snake_head_texture);
 
-
-    //rabbit.set
+    //text_box.setString("Snake.game\n");
+    text_box.setCharacterSize(24);
+    if (!font.loadFromFile("arial.ttf"))
+    {
+        std::cout << "zhopa" << std::endl;
+    }
+    text_box.setFont(font);
+    text_box.setFillColor(sf::Color::Red);
+    text_box.setPosition(win_size.first*pixel_size + 2*pixel_size, 3*pixel_size);
 
     window.setFramerateLimit(frame);   
 }
@@ -53,7 +60,6 @@ void GView::draw()
         window.draw(brick);
     }
 
-
 }
 
 void GView::draw(std::list<Rabbit>& rabbits, std::list<Snake>& snakes)
@@ -65,6 +71,17 @@ void GView::draw(std::list<Rabbit>& rabbits, std::list<Snake>& snakes)
 
     for(const auto& snake: snakes)
         draw_snake(snake);
+
+    
+    text_box.setPosition(win_size.first*pixel_size + 2*pixel_size, 3*pixel_size);
+    int snake_number = 0;
+    for(const auto& snake: snakes)
+    {
+        text_box.setString("snake"+ std::to_string(snake_number)+ ": " + std::to_string(snake.length));
+        window.draw(text_box);
+        text_box.move(0, 3*pixel_size);
+        snake_number++;
+    }
 
     return;
 }
@@ -78,7 +95,27 @@ void GView::draw_rabbit(const Rabbit& rabbit_)
 void GView::draw_snake(const Snake& snake)
 {
     snake_head.setPosition((snake.head.first-1)*pixel_size, (snake.head.second-1)*pixel_size);
+    //snake_head.setRotation(90.f);
+    //snake_head.rotate(10.f);
+
+    if(snake.direction == RIGHT)
+    {
+        snake_head.setRotation(-90.f);
+        snake_head.move(0, pixel_size);
+    }
+    if(snake.direction == LEFT)
+    {
+        snake_head.setRotation(90.f);
+        snake_head.move(pixel_size, 0);
+    }
+    if(snake.direction == DOWN)
+    {
+        snake_head.setRotation(180.f);
+        snake_head.move(pixel_size, pixel_size);
+    }
+
     window.draw(snake_head);
+    snake_head.setRotation(0);
 
     for(const auto& part: snake.body)
     {
@@ -122,16 +159,16 @@ void GView::mainloop()
         window.clear();
         if(frame_number % (frame/5) != 0)
         {
-            if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::A) && direction != DOWN)
                 direction = UP;
 
-            if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::D) && direction != UP)
                 direction = DOWN;
 
-            if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::W) && direction != RIGHT)
                 direction = LEFT;
 
-            if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::S) && direction != LEFT)
                 direction = RIGHT;
 
             for(const auto& onkey: onkeys)

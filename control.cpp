@@ -57,26 +57,41 @@ void Control::timer()
         {
             if(snake.head.first < min_rabbit.xy.first)
             {
-                snake.direction = DOWN; 
+                if(snake.direction != UP)
+                    snake.direction = DOWN;
+                else
+                    snake.direction = RIGHT;
             }
             else
             {
-                snake.direction = UP;
+                if(snake.direction != DOWN)
+                    snake.direction = UP;
+                else 
+                    snake.direction = LEFT;
             }
         }
         else
         {
-            if(snake.head.second < min_rabbit.xy.second)
+            if(snake.head.second != min_rabbit.xy.second)
             {
-                snake.direction = RIGHT; 
-            }
-            else
-            {
-                snake.direction = LEFT; 
+                if(snake.head.second < min_rabbit.xy.second)
+                {
+                    if(snake.direction != LEFT)
+                        snake.direction = RIGHT; 
+                    else
+                        snake.direction = DOWN;
+                }
+                else
+                {
+                    if(snake.direction != RIGHT)
+                        snake.direction = LEFT;
+                    else
+                        snake.direction = UP;
+                }
             }
         }
 
-        snake.direction = (min_distance % 4) + 1;
+        //snake.direction = (min_distance % 4) + 1;
 
         //std::cout << snake.direction << std::endl;
     }

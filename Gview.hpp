@@ -19,6 +19,9 @@ class GView : public View
     sf::Sprite snake_head;
     sf::Texture snake_head_texture;
 
+    sf::Text text_box;
+    sf::Font font;
+
     unsigned frame = 160;
 
     public:

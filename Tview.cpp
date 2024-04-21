@@ -129,7 +129,7 @@ void TView::mainloop()
     
     int timeout = 1000/FPS;
     //FILE* logfile = fopen("logfile2.txt", "w");
-    for(int i = 0; i < 1000000; i++)
+    for(int i = 0; i < 10000000; i++)
     {
         auto first_time = std::chrono::system_clock::now();
         int n = poll(&input, 1, timeout);
