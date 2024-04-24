@@ -30,6 +30,7 @@ class Snake
 {
     public:
     int length;
+    int last_length = 0;
     int direction = 1;
     bool is_controlled = false;
     coord head;
@@ -49,6 +50,7 @@ class View
     protected:
     struct termios old_term;
     public:
+    bool is_game_goes = true;
     coord win_size = {0, 0};
     static View* view;
     static View* get(std::string s = "text");

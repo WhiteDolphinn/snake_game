@@ -48,6 +48,18 @@ void TView::draw(std::list<Rabbit>& rabbits, std::list<Snake>& snakes)
     for(const auto& snake: snakes)
         draw_snake(snake);
 
+    int snake_number = 0;
+    gotoxy(win_size.first, 1);
+    for(const auto& snake: snakes)
+    {
+        if(snake.is_controlled == true)
+            std::cout << "snake(human)" << std::to_string(snake_number) << ":" << std::to_string(snake.length) << "##";
+        else
+            std::cout << "snake(bot)" <<  std::to_string(snake_number) <<  ":" << std::to_string(snake.length) << "##";
+
+        snake_number++;
+    }
+
     gotoxy(win_size.first, win_size.second);
     std::cout << std::flush;
         
@@ -100,17 +112,20 @@ void TView::draw_rabbit(const Rabbit& rabbit)
 
 void TView::draw_snake(const Snake& snake)
 {
-    gotoxy(snake.head.first, snake.head.second);
-    std::cout << "O";
-
-    for(const auto& part: snake.body)
+    if(snake.length != 0)
     {
-        gotoxy(part.first, part.second);
-        std::cout << "o";
+        gotoxy(snake.head.first, snake.head.second);
+        std::cout << "O";
+
+        for(const auto& part: snake.body)
+        {
+            gotoxy(part.first, part.second);
+            std::cout << "o";
+        }
+        
+        gotoxy(snake.tail.first, snake.tail.second);
+        std::cout << "*";
     }
-    
-    gotoxy(snake.tail.first, snake.tail.second);
-    std::cout << "*";
 
     return;
 }
@@ -119,6 +134,7 @@ void TView::bye_print()
 {
     printf("\033[H\033[J");
     printf("\033[%d;%dH Good bye!\n", win_size.first/2, win_size.second/2);
+    gotoxy(win_size.first, win_size.second);
     exit(0);
 }
 
@@ -131,6 +147,9 @@ void TView::mainloop()
     //FILE* logfile = fopen("logfile2.txt", "w");
     for(int i = 0; i < 10000000; i++)
     {
+        if(is_game_goes == false)
+            break;
+
         auto first_time = std::chrono::system_clock::now();
         int n = poll(&input, 1, timeout);
         auto second_time = std::chrono::system_clock::now();
@@ -193,12 +212,11 @@ void TView::mainloop()
                     onkey(direction);
                 }
             }
-            buf[0] = '\0';
-            
+            buf[0] = '\0';   
         }
-        //fflush(logfile);
     }
-    //fclose(logfile);
+
+    bye_print();
 }
 
 TView::TView()

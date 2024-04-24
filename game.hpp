@@ -18,6 +18,8 @@ class Model
     void generate_snakes();
     void update_snake(std::list<Snake>::iterator snake);
 
+    void end_game();
+    bool is_game_goes = true;
 
     public:
     View& view;

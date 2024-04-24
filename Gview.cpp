@@ -5,8 +5,10 @@
 const int BUFSIZE = 10;
 
 GView::GView()
-        : window(sf::VideoMode(win_size.first*pixel_size+200, win_size.second*pixel_size), "Game: Snake"), brick(sf::Vector2f(10.f, 10.f))
+        : window(sf::VideoMode(150*pixel_size+300, 90*pixel_size), "Game: Snake"), brick(sf::Vector2f(10.f, 10.f))
 {
+    win_size.first = 150;
+    win_size.second = 90;
     brick.setFillColor(sf::Color::Green);
     brick.setPosition(win_size.first*pixel_size/2, win_size.second*pixel_size/2);
 
@@ -77,7 +79,10 @@ void GView::draw(std::list<Rabbit>& rabbits, std::list<Snake>& snakes)
     int snake_number = 0;
     for(const auto& snake: snakes)
     {
-        text_box.setString("snake"+ std::to_string(snake_number)+ ": " + std::to_string(snake.length));
+        if(snake.is_controlled == true)
+            text_box.setString("snake(human)"+ std::to_string(snake_number)+ ": " + std::to_string(snake.length));
+        else
+            text_box.setString("snake(bot)"+ std::to_string(snake_number)+ ": " + std::to_string(snake.length));
         window.draw(text_box);
         text_box.move(0, 3*pixel_size);
         snake_number++;
@@ -136,6 +141,9 @@ void GView::print_game_name(std::string game_name)
 
 void GView::bye_print()
 {
+    text_box.setPosition(win_size.first*pixel_size/2 - 150, win_size.second*pixel_size/2);
+    text_box.setString("Goodbye");
+    window.draw(text_box);
     return;
 }
 
@@ -146,6 +154,9 @@ void GView::mainloop()
 
     while (window.isOpen())
     {
+        if(is_game_goes == false)
+            break;
+
         frame_number = (frame_number + 1) % frame;
 
         sf::Event event;
@@ -184,6 +195,8 @@ void GView::mainloop()
             window.display();
 
     }
+
+    bye_print();
 
     return;
 }

@@ -42,10 +42,20 @@ void Model::generate_snakes()
     snake2.direction = RIGHT;
     snake2.is_controlled = false;
     
-    snake2.head = {5, 5};
-    snake2.tail = {4, 5};
+    snake2.head = {10, 5};
+    snake2.tail = {9, 5};
 
     snakes.push_back(snake2);
+
+        Snake snake3;
+    snake3.length = 2;
+    snake3.direction = RIGHT;
+    snake3.is_controlled = false;
+    
+    snake3.head = {15, 5};
+    snake3.tail = {14, 5};
+
+    snakes.push_back(snake3);
 
 }
 
@@ -54,6 +64,7 @@ void Model::update()
     for(auto snake = snakes.begin(); snake != snakes.end(); snake++)
     {
         for(auto rabbit = rabbits.begin(); rabbit != rabbits.end(); rabbit++)
+        {
             if((*snake).head == (*rabbit).xy)
             {
                 coord buf_coord = {0, 0};
@@ -63,12 +74,56 @@ void Model::update()
                 (*rabbit).xy.first = (rand() % (view.win_size.first-2))+2;
                 (*rabbit).xy.second = (rand() % (view.win_size.second-2))+2;
             }
+        }
+
+        if( (*snake).head.first == 1 || (*snake).head.first == view.win_size.first ||
+            (*snake).head.second == 1 || (*snake).head.second == view.win_size.second)
+        {
+            (*snake).last_length = (*snake).length;
+            (*snake).length = 0;
+            (*snake).head = {0, 0};
+        }
+
+        for(auto snake2 = snakes.begin(); snake2 != snakes.end(); snake2++)
+        {
+            if(snake != snake2)
+            {
+                if((*snake).head == (*snake2).head)
+                {
+                    (*snake).last_length = (*snake).length;
+                    (*snake).length = 0;
+                    (*snake).head = {0, 0}; 
+
+                    (*snake2).last_length = (*snake).length;
+                    (*snake2).length = 0;
+                    (*snake2).head = {0, 0};
+                }
+            }
+
+                for(const auto& body: (*snake2).body)
+                {
+                    if((*snake).head == body)
+                    {
+                        (*snake).last_length = (*snake).length;
+                        (*snake).length = 0;
+                        (*snake).head = {0, 0};
+                    }
+                }
+        }
 
         update_snake(snake);
     }
 
+    for(auto snake: snakes)
+    {
+        if(snake.length != 0)
+        {
+            view.draw(rabbits, snakes);
+            return;
+        }
+    }
+        end_game();
 
-    view.draw(rabbits, snakes);
 }
 
 void Model::update_snake(std::list<Snake>::iterator snake)
@@ -115,4 +170,9 @@ void Model::update_snake(std::list<Snake>::iterator snake)
     
     (*snake).tail.first = prev_x;
     (*snake).tail.second = prev_y;
+}
+
+void Model::end_game()
+{
+    view.is_game_goes = false;
 }

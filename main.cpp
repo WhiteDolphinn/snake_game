@@ -17,9 +17,15 @@ int main(const int argc, const char** argv)
 
     Control control_bot(model, *(current_snake));
     control_bot.get_user_input();
+    current_snake++;
+    
+    Control control_bot2(model, *(current_snake));
+    control_bot.get_user_input();
+
 
     view->mainloop();
-    
+
     delete view;
+    
     return 0;
 }
