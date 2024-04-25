@@ -22,13 +22,9 @@ https://www.sfml-dev.org/download/sfml/2.6.1/
 ### Running
 To run console version use:
 ```bash
-./snake
-```
-or
-```bash
-./snake text
+./snake text [num_of_bots] [num_of_rabbits]
 ```
 To run graphic version use:
 ```bash
-./snake [any_word]
+./snake [any_word] [num_of_bots] [num_of_rabbits]
 ```

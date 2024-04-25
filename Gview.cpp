@@ -90,12 +90,15 @@ void GView::draw(std::list<Rabbit>& rabbits, std::list<Snake>& snakes)
 
 
     std::string str = "";
+    snake_number = 0;
+
     for(const auto& snake: snakes)
     {
+        //std::cout << "zyx: " << snake.last_length << std::endl;
         if(snake.is_controlled == true)
-            str += "snake(human)"+ std::to_string(snake_number)+ ": " + std::to_string(snake.length) + "\n";
+            str += "snake(human)"+ std::to_string(snake_number++)+ ": " + std::to_string(snake.last_length + snake.length) + "\n";
         else
-            str += "snake(bot)"+ std::to_string(snake_number)+ ": " + std::to_string(snake.length) + "\n";
+            str += "snake(bot)"+ std::to_string(snake_number++)+ ": " + std::to_string(snake.last_length + snake.length) + "\n";
     }
     text_box.setString(str);
 
@@ -156,15 +159,7 @@ void GView::bye_print()
     std::string str = text_box.getString();
     text_box.setString(str);
 
-    /*for(int max_length = 160*90; max_length >= 0; max_length--)
-    {
-        
-    }*/
-
     window.draw(text_box);
-
-
-
     return;
 }
 
@@ -175,15 +170,6 @@ void GView::mainloop()
 
     while (window.isOpen())
     {
-            if(is_game_goes == false && (frame_number % (frame/5) == 0))
-            {
-                bye_print();
-                window.display();
-                continue;
-            }
-
-        frame_number = (frame_number + 1) % frame;
-
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -191,6 +177,16 @@ void GView::mainloop()
                 window.close();
 
         }
+
+        if(is_game_goes == false && (frame_number % (frame/5) == 0))
+        {
+            bye_print();
+            window.display();
+            continue;
+        }
+
+        frame_number = (frame_number + 1) % frame;
+
 
         window.clear();
         if(frame_number % (frame/5) != 0)
@@ -218,7 +214,6 @@ void GView::mainloop()
                 ontime();
         }
             window.display();
-
     }
 
     return;

@@ -1,5 +1,6 @@
 #include "control.hpp"
 #include <functional>
+//#include <iostream>
 
 void Control::get_user_input()
 {
@@ -18,7 +19,6 @@ Control::Control(Model& model_, Snake& snake_)
 
     auto f3 = std::bind(&Control::draw_without_update, this);
     model.view.set_draw_without_update(f3);
-
 }
 
 void Control::key_pressed(int key)

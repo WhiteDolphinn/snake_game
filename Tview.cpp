@@ -135,7 +135,7 @@ void TView::bye_print()
     printf("\033[H\033[J");
     printf("\033[%d;%dH Good bye!\n", win_size.first/2, win_size.second/2);
     gotoxy(win_size.first, win_size.second);
-    exit(0);
+    //exit(0);
 }
 
 void TView::mainloop()

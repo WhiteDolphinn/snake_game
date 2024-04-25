@@ -1,5 +1,6 @@
 #include "game.hpp"
 #include <csignal>
+//#include <iostream>
 
 void Model::set_name(char* buff)
 {
@@ -38,16 +39,24 @@ void Model::generate_snakes()
     snakes.push_back(snake);*/
 
     Snake snake2;
-    snake2.length = 2;
-    snake2.direction = RIGHT;
-    snake2.is_controlled = false;
-    
-    snake2.head = {10, 5};
-    snake2.tail = {9, 5};
+    for(int i = 0; i < num_of_bots; i++)
+    {
+        snake2.length = 2;
+        snake2.direction = RIGHT;
+        snake2.is_controlled = false;
+        
+        int snake_head_first = (rand() % (view.win_size.first-3))+2;
+        int snake_head_second = (rand() % (view.win_size.second-3))+2;
 
-    snakes.push_back(snake2);
+        snake2.head = {snake_head_first, snake_head_second};
+        snake2.tail = {snake_head_first-1, snake_head_second};
+        /*snake2.head = {10, 5};
+        snake2.tail = {9, 5};*/
 
-        Snake snake3;
+        snakes.push_back(snake2);
+    }
+
+    /*Snake snake3;
     snake3.length = 2;
     snake3.direction = RIGHT;
     snake3.is_controlled = false;
@@ -55,7 +64,7 @@ void Model::generate_snakes()
     snake3.head = {15, 5};
     snake3.tail = {14, 5};
 
-    snakes.push_back(snake3);
+    snakes.push_back(snake3);*/
 
 }
 
@@ -79,7 +88,11 @@ void Model::update()
         if( (*snake).head.first == 1 || (*snake).head.first == view.win_size.first ||
             (*snake).head.second == 1 || (*snake).head.second == view.win_size.second)
         {
-            (*snake).last_length = (*snake).length;
+            if((*snake).length != 0)
+            {
+                (*snake).last_length = (*snake).length;
+                std::cout << (*snake).last_length << std::endl;
+            }
             (*snake).length = 0;
             (*snake).head = {0, 0};
         }
@@ -90,11 +103,19 @@ void Model::update()
             {
                 if((*snake).head == (*snake2).head)
                 {
-                    (*snake).last_length = (*snake).length;
+                    if((*snake).length != 0)
+                    {
+                        (*snake).last_length = (*snake).length;
+                        //std::cout << (*snake).last_length << std::endl;
+                    }
                     (*snake).length = 0;
                     (*snake).head = {0, 0}; 
 
-                    (*snake2).last_length = (*snake).length;
+                    if((*snake2).length != 0)
+                    {
+                        (*snake2).last_length = (*snake2).length;
+                        //std::cout << (*snake).last_length << std::endl;
+                    }
                     (*snake2).length = 0;
                     (*snake2).head = {0, 0};
                 }
@@ -104,7 +125,11 @@ void Model::update()
                 {
                     if((*snake).head == body)
                     {
-                        (*snake).last_length = (*snake).length;
+                        if((*snake).length != 0)
+                        {
+                            (*snake).last_length = (*snake).length;
+                            //std::cout << (*snake).last_length << std::endl;
+                        }
                         (*snake).length = 0;
                         (*snake).head = {0, 0};
                     }
