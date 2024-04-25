@@ -27,7 +27,7 @@ void Model::generate_rabbits()
 
 void Model::generate_snakes()
 {
-    Snake snake;
+    /*Snake snake;
     snake.length = 2;
     snake.direction = RIGHT;
     snake.is_controlled = true;
@@ -35,7 +35,7 @@ void Model::generate_snakes()
     snake.head = {3, 2};
     snake.tail = {3, 1};
 
-    snakes.push_back(snake);
+    snakes.push_back(snake);*/
 
     Snake snake2;
     snake2.length = 2;

@@ -2,10 +2,7 @@
 
 The game snake in two implementations - console pseudographic and sfml-graphic.
 
-## Features
-
-
-### Installation
+## Installation
 You should install sfml-library for graphic version and clone this repository.
 ##### Cloning repository
 

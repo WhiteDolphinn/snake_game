@@ -1,7 +1,6 @@
 #include "control.hpp"
 #include "game.hpp"
 #include "view.hpp"
-#include <stdio.h>
 
 int main(const int argc, const char** argv)
 {
@@ -11,16 +10,16 @@ int main(const int argc, const char** argv)
     Model model(*view);
 
     auto current_snake = model.snakes.begin();
-    Control control(model, *current_snake);
+    /*Control control(model, *current_snake);
     control.get_user_input();  
-    current_snake++;
+    current_snake++;*/
 
     Control control_bot(model, *(current_snake));
-    control_bot.get_user_input();
+    //control_bot.get_user_input();
     current_snake++;
     
     Control control_bot2(model, *(current_snake));
-    control_bot.get_user_input();
+    //control_bot2.get_user_input();
 
 
     view->mainloop();

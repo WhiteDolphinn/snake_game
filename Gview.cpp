@@ -88,6 +88,17 @@ void GView::draw(std::list<Rabbit>& rabbits, std::list<Snake>& snakes)
         snake_number++;
     }
 
+
+    std::string str = "";
+    for(const auto& snake: snakes)
+    {
+        if(snake.is_controlled == true)
+            str += "snake(human)"+ std::to_string(snake_number)+ ": " + std::to_string(snake.length) + "\n";
+        else
+            str += "snake(bot)"+ std::to_string(snake_number)+ ": " + std::to_string(snake.length) + "\n";
+    }
+    text_box.setString(str);
+
     return;
 }
 
@@ -142,8 +153,18 @@ void GView::print_game_name(std::string game_name)
 void GView::bye_print()
 {
     text_box.setPosition(win_size.first*pixel_size/2 - 150, win_size.second*pixel_size/2);
-    text_box.setString("Goodbye");
+    std::string str = text_box.getString();
+    text_box.setString(str);
+
+    /*for(int max_length = 160*90; max_length >= 0; max_length--)
+    {
+        
+    }*/
+
     window.draw(text_box);
+
+
+
     return;
 }
 
@@ -154,8 +175,12 @@ void GView::mainloop()
 
     while (window.isOpen())
     {
-        if(is_game_goes == false)
-            break;
+            if(is_game_goes == false && (frame_number % (frame/5) == 0))
+            {
+                bye_print();
+                window.display();
+                continue;
+            }
 
         frame_number = (frame_number + 1) % frame;
 
@@ -195,8 +220,6 @@ void GView::mainloop()
             window.display();
 
     }
-
-    bye_print();
 
     return;
 }

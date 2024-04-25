@@ -15,5 +15,6 @@ class Control
     void key_pressed(int key);
     void timer();
     void draw_without_update();
+    void stupid_bot();
 
 };
