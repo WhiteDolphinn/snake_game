@@ -1,6 +1,5 @@
 #include "control.hpp"
 #include <functional>
-//#include <iostream>
 
 void Control::get_user_input()
 {

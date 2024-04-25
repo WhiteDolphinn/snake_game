@@ -25,7 +25,6 @@ GView::GView()
         std::cout<< "povialdjvldfbjkdf[p;bljkvp[;lgx;kbd;bvd;l]]" << std::endl;
     snake_head.setTexture(snake_head_texture);
 
-    //text_box.setString("Snake.game\n");
     text_box.setCharacterSize(24);
     if (!font.loadFromFile("arial.ttf"))
     {
@@ -94,7 +93,6 @@ void GView::draw(std::list<Rabbit>& rabbits, std::list<Snake>& snakes)
 
     for(const auto& snake: snakes)
     {
-        //std::cout << "zyx: " << snake.last_length << std::endl;
         if(snake.is_controlled == true)
             str += "snake(human)"+ std::to_string(snake_number++)+ ": " + std::to_string(snake.last_length + snake.length) + "\n";
         else
@@ -114,8 +112,6 @@ void GView::draw_rabbit(const Rabbit& rabbit_)
 void GView::draw_snake(const Snake& snake)
 {
     snake_head.setPosition((snake.head.first-1)*pixel_size, (snake.head.second-1)*pixel_size);
-    //snake_head.setRotation(90.f);
-    //snake_head.rotate(10.f);
 
     if(snake.direction == RIGHT)
     {

@@ -1,6 +1,5 @@
 #include "game.hpp"
 #include <csignal>
-//#include <iostream>
 
 void Model::set_name(char* buff)
 {
@@ -12,18 +11,13 @@ void Model::generate_rabbits()
     srand(time(NULL));
     Rabbit rabbit;
 
-    //FILE* logfile = fopen("logfile.txt", "w");
-
     for(int i = 0; i < num_of_rabbits; i++)
     {   
         rabbit.xy.first = (rand() % (view.win_size.first-2))+2;
         rabbit.xy.second = (rand() % (view.win_size.second-2))+2;
         
-        //fprintf(logfile, "%d %d %d\n", i, rabbit.xy.first, rabbit.xy.second);
         rabbits.push_back(rabbit);
     }
-
-    //fclose(logfile); 
 }
 
 void Model::generate_snakes()
@@ -50,21 +44,9 @@ void Model::generate_snakes()
 
         snake2.head = {snake_head_first, snake_head_second};
         snake2.tail = {snake_head_first-1, snake_head_second};
-        /*snake2.head = {10, 5};
-        snake2.tail = {9, 5};*/
 
         snakes.push_back(snake2);
     }
-
-    /*Snake snake3;
-    snake3.length = 2;
-    snake3.direction = RIGHT;
-    snake3.is_controlled = false;
-    
-    snake3.head = {15, 5};
-    snake3.tail = {14, 5};
-
-    snakes.push_back(snake3);*/
 
 }
 
@@ -74,64 +56,56 @@ void Model::update()
     {
         for(auto rabbit = rabbits.begin(); rabbit != rabbits.end(); rabbit++)
         {
-            if((*snake).head == (*rabbit).xy)
+            if(snake->head == rabbit->xy)
             {
                 coord buf_coord = {0, 0};
-                (*snake).length++;
-                (*snake).body.push_back(buf_coord);
+                snake->length++;
+                snake->body.push_back(buf_coord);
 
-                (*rabbit).xy.first = (rand() % (view.win_size.first-2))+2;
-                (*rabbit).xy.second = (rand() % (view.win_size.second-2))+2;
+                rabbit->xy.first = (rand() % (view.win_size.first-2))+2;
+                rabbit->xy.second = (rand() % (view.win_size.second-2))+2;
             }
         }
 
-        if( (*snake).head.first == 1 || (*snake).head.first == view.win_size.first ||
-            (*snake).head.second == 1 || (*snake).head.second == view.win_size.second)
+        if( snake->head.first == 1 || snake->head.first == view.win_size.first ||
+            snake->head.second == 1 || snake->head.second == view.win_size.second)
         {
-            if((*snake).length != 0)
-            {
-                (*snake).last_length = (*snake).length;
-                std::cout << (*snake).last_length << std::endl;
-            }
-            (*snake).length = 0;
-            (*snake).head = {0, 0};
+            if(snake->length != 0)
+                snake->last_length = snake->length;
+
+            snake->length = 0;
+            snake->head = {0, 0};
         }
 
         for(auto snake2 = snakes.begin(); snake2 != snakes.end(); snake2++)
         {
             if(snake != snake2)
             {
-                if((*snake).head == (*snake2).head)
+                if(snake->head == snake2->head)
                 {
-                    if((*snake).length != 0)
-                    {
-                        (*snake).last_length = (*snake).length;
-                        //std::cout << (*snake).last_length << std::endl;
-                    }
-                    (*snake).length = 0;
-                    (*snake).head = {0, 0}; 
+                    if(snake->length != 0)
+                        snake->last_length = snake->length;
 
-                    if((*snake2).length != 0)
-                    {
-                        (*snake2).last_length = (*snake2).length;
-                        //std::cout << (*snake).last_length << std::endl;
-                    }
-                    (*snake2).length = 0;
-                    (*snake2).head = {0, 0};
+                    snake->length = 0;
+                    snake->head = {0, 0}; 
+
+                    if(snake2->length != 0)
+                        snake2->last_length = snake2->length;
+
+                    snake2->length = 0;
+                    snake2->head = {0, 0};
                 }
             }
 
-                for(const auto& body: (*snake2).body)
+                for(const auto& body: snake2->body)
                 {
-                    if((*snake).head == body)
+                    if(snake->head == body)
                     {
-                        if((*snake).length != 0)
-                        {
-                            (*snake).last_length = (*snake).length;
-                            //std::cout << (*snake).last_length << std::endl;
-                        }
-                        (*snake).length = 0;
-                        (*snake).head = {0, 0};
+                        if(snake->length != 0)
+                            snake->last_length = snake->length;
+                
+                        snake->length = 0;
+                        snake->head = {0, 0};
                     }
                 }
         }
@@ -154,47 +128,47 @@ void Model::update()
 void Model::update_snake(std::list<Snake>::iterator snake)
 {
     
-    int prev_x = (*snake).head.first;
-    int prev_y = (*snake).head.second;
+    int prev_x = snake->head.first;
+    int prev_y = snake->head.second;
     int prev_2x = 0;
     int prev_2y = 0;
 
-    switch ((*snake).direction)
+    switch (snake->direction)
     {
     case UP:
-        (*snake).head.first--;
+        snake->head.first--;
         break;
     
     case DOWN:
-        (*snake).head.first++;
+        snake->head.first++;
         break;
 
     case LEFT:
-        (*snake).head.second--;
+        snake->head.second--;
         break;
 
     case RIGHT:
-        (*snake).head.second++;
+        snake->head.second++;
         break;
     
     default:
         break;
     }
 
-    for(auto part = (*snake).body.begin(); part != (*snake).body.end(); part++)
+    for(auto part = snake->body.begin(); part != snake->body.end(); part++)
     {
-        prev_2x = (*part).first;
-        prev_2y = (*part).second;
+        prev_2x = part->first;
+        prev_2y = part->second;
 
-        (*part).first = prev_x;
-        (*part).second = prev_y;
+        part->first = prev_x;
+        part->second = prev_y;
 
         prev_x = prev_2x;
         prev_y = prev_2y;
     }
     
-    (*snake).tail.first = prev_x;
-    (*snake).tail.second = prev_y;
+    snake->tail.first = prev_x;
+    snake->tail.second = prev_y;
 }
 
 void Model::end_game()
