@@ -22,15 +22,18 @@ void Model::generate_rabbits()
 
 void Model::generate_snakes()
 {
-    /*Snake snake;
-    snake.length = 2;
-    snake.direction = RIGHT;
-    snake.is_controlled = true;
+    if(is_human == true)
+    {
+        Snake snake;
+        snake.length = 2;
+        snake.direction = RIGHT;
+        snake.is_controlled = true;
 
-    snake.head = {3, 2};
-    snake.tail = {3, 1};
+        snake.head = {3, 2};
+        snake.tail = {3, 1};
 
-    snakes.push_back(snake);*/
+        snakes.push_back(snake);
+    }
 
     Snake snake2;
     for(int i = 0; i < num_of_bots; i++)
@@ -174,4 +177,43 @@ void Model::update_snake(std::list<Snake>::iterator snake)
 void Model::end_game()
 {
     view.is_game_goes = false;
+}
+
+void Model::set_field()
+{
+    for(auto& line: field)
+        for(auto& cell: line)
+            cell = 0;
+
+    for(int i = 0; i <= view.win_size.first; i++)
+    {
+        field[i][0] = 1;
+        field[i][view.win_size.second] = 1;
+    }
+
+    for(int i = 0; i <= view.win_size.second; i++)
+    {
+        field[0][i] = 1;
+        field[view.win_size.first][i] = 1;
+    }
+
+    for(const auto& snake: snakes)
+    {
+        //std::cout << "govno1" << std::endl;
+        if(snake.head != coord{0,0} && snake.length != 0)
+        {
+            field[snake.head.first][snake.head.second] = 1;
+
+            for(const auto& body: snake.body)
+                field[body.first][body.second] = 1;
+
+            field[snake.tail.first][snake.tail.second] = 1;
+        }
+        //std::cout << "govno2" << std::endl;
+    }
+
+    for(const auto& rabbit: rabbits)
+    {
+        field[rabbit.xy.first][rabbit.xy.second] = -1;
+    }
 }

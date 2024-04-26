@@ -9,6 +9,7 @@ int main(const int argc, const char** argv)
 
     int num_of_bots = 2;
     int num_of_rabbits = 5;
+    bool is_human = false;
 
     if(argc > 2)
         num_of_bots = std::stoi(argv[2]);
@@ -16,7 +17,10 @@ int main(const int argc, const char** argv)
     if(argc > 3)
         num_of_rabbits = std::stoi(argv[3]);
 
-    Model model(*view, num_of_bots, num_of_rabbits);
+    if(argc > 4 && argv[4][0] == 'h')
+        is_human = true;
+
+    Model model(*view, num_of_bots, num_of_rabbits, is_human);
 
     std::list<Control*> control_list;
     auto current_snake = model.snakes.begin();

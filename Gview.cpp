@@ -78,10 +78,15 @@ void GView::draw(std::list<Rabbit>& rabbits, std::list<Snake>& snakes)
     int snake_number = 0;
     for(const auto& snake: snakes)
     {
-        if(snake.is_controlled == true)
-            text_box.setString("snake(human)"+ std::to_string(snake_number)+ ": " + std::to_string(snake.length));
+        if(snake.head == coord{0, 0} || snake.length == 0)
+            text_box.setFillColor(sf::Color::Red);
         else
-            text_box.setString("snake(bot)"+ std::to_string(snake_number)+ ": " + std::to_string(snake.length));
+            text_box.setFillColor(sf::Color::Green);
+
+        if(snake.is_controlled == true)
+            text_box.setString("snake(human)"+ std::to_string(snake_number)+ ": " + std::to_string(snake.length + snake.last_length));
+        else
+            text_box.setString("snake(bot)"+ std::to_string(snake_number)+ ": " + std::to_string(snake.length + snake.last_length));
         window.draw(text_box);
         text_box.move(0, 3*pixel_size);
         snake_number++;
@@ -151,7 +156,7 @@ void GView::print_game_name(std::string game_name)
 
 void GView::bye_print()
 {
-    text_box.setPosition(win_size.first*pixel_size/2 - 150, win_size.second*pixel_size/2);
+    text_box.setPosition(win_size.first*pixel_size/2 - 150, 2*pixel_size);
     std::string str = text_box.getString();
     text_box.setString(str);
 

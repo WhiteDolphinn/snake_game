@@ -22,23 +22,29 @@ class Model
 
     int num_of_rabbits = 5;
     int num_of_bots = 2;
+    bool is_human = false;
 
     public:
     View& view;
     std::list<Rabbit> rabbits;
     std::list<Snake> snakes;
+    std::vector<std::vector<char>> field; 
 
-    Model(View& view_, int num_of_bots_ = 2, int num_of_rabbits_ = 5)
-    : view(view_)
+    Model(View& view_, int num_of_bots_ = 2, int num_of_rabbits_ = 5, bool is_human_ = false)
+    : view(view_), field(151, std::vector<char>(91))///////////////////////////////////////////
     {
         num_of_bots = num_of_bots_;
         num_of_rabbits = num_of_rabbits_;
+        is_human = is_human_;
+
         generate_rabbits();
         generate_snakes();
     }
 
     void set_name(char* buff);
     void update();
+
+    void set_field();
 };
 
 enum direction
