@@ -1,6 +1,6 @@
 #include "Gview.hpp"
 #include "game.hpp"
-//#include <unistd.h>
+#include <chrono>
 
 const int BUFSIZE = 10;
 
@@ -17,18 +17,26 @@ GView::GView()
     rabbit.setTexture(rabbit_texture);
 
     
-    if(!snake_body_texture.loadFromFile("snakebody.jpg"))
+    if(!snake_body_texture_human.loadFromFile("snakebody.jpg"))
         std::cout<< "povialdjvldfbjkdf[p;bljkvp[;lgx;kbd;bvd;l]]" << std::endl;
-    snake_body.setTexture(snake_body_texture);
+    snake_body_human.setTexture(snake_body_texture_human);
 
-    if(!snake_head_texture.loadFromFile("snakehead2.png"))
+    if(!snake_body_texture_stupid_bot.loadFromFile("snakebody2.png"))
+        std::cout<< "povialdjvldfbjkdf[p;bljkvp[;lgx;kbd;bvd;l]]" << std::endl;
+    snake_body_stupid_bot.setTexture(snake_body_texture_stupid_bot);
+
+    if(!snake_body_texture_smart_bot.loadFromFile("snakebody3.png"))
+        std::cout<< "povialdjvldfbjkdf[p;bljkvp[;lgx;kbd;bvd;l]]" << std::endl;
+    snake_body_smart_bot.setTexture(snake_body_texture_smart_bot);
+
+    if(!snake_head_texture.loadFromFile("snakehead.png"))
         std::cout<< "povialdjvldfbjkdf[p;bljkvp[;lgx;kbd;bvd;l]]" << std::endl;
     snake_head.setTexture(snake_head_texture);
 
     text_box.setCharacterSize(24);
     if (!font.loadFromFile("arial.ttf"))
     {
-        std::cout << "zhopa" << std::endl;
+        std::cout << "No \"arial.ttf\" file in this directory" << std::endl;
     }
     text_box.setFont(font);
     text_box.setFillColor(sf::Color::Red);
@@ -116,6 +124,19 @@ void GView::draw_rabbit(const Rabbit& rabbit_)
 
 void GView::draw_snake(const Snake& snake)
 {
+    if(snake.is_controlled)
+    {
+        snake_body = snake_body_human;
+    }
+    else
+    {
+        if(snake.is_stupid_bot)
+            snake_body = snake_body_stupid_bot;
+        else
+            snake_body = snake_body_smart_bot;
+    }
+
+
     snake_head.setPosition((snake.head.first-1)*pixel_size, (snake.head.second-1)*pixel_size);
 
     if(snake.direction == RIGHT)
@@ -171,15 +192,33 @@ void GView::mainloop()
 
     while (window.isOpen())
     {
+        auto time1 = std::chrono::system_clock::now();
         sf::Event event;
         while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
                 window.close();
 
+            if(event.type == sf::Event::KeyPressed)
+            {
+                
+                if(event.key.code == sf::Keyboard::A && direction != DOWN)
+                    direction = UP;
+
+                if(event.key.code == sf::Keyboard::D && direction != UP)
+                    direction = DOWN;
+
+                if(event.key.code == sf::Keyboard::W && direction != RIGHT)
+                    direction = LEFT;
+
+                if(event.key.code == sf::Keyboard::S && direction != LEFT)
+                    direction = RIGHT;
+            }
+
         }
 
-        if(is_game_goes == false && (frame_number % (frame/5) == 0))
+
+        if(is_game_goes == false && (frame_number % (frame/UPS) == 0))
         {
             bye_print();
             window.display();
@@ -190,20 +229,8 @@ void GView::mainloop()
 
 
         window.clear();
-        if(frame_number % (frame/5) != 0)
+        if(frame_number % (frame/UPS) != 0)
         {
-            if(sf::Keyboard::isKeyPressed(sf::Keyboard::A) && direction != DOWN)
-                direction = UP;
-
-            if(sf::Keyboard::isKeyPressed(sf::Keyboard::D) && direction != UP)
-                direction = DOWN;
-
-            if(sf::Keyboard::isKeyPressed(sf::Keyboard::W) && direction != RIGHT)
-                direction = LEFT;
-
-            if(sf::Keyboard::isKeyPressed(sf::Keyboard::S) && direction != LEFT)
-                direction = RIGHT;
-
             for(const auto& onkey: onkeys)
                 onkey(direction);
 
@@ -214,7 +241,12 @@ void GView::mainloop()
             for(const auto& ontime: ontimes)
                 ontime();
         }
+
             window.display();
+
+        auto time2 = std::chrono::system_clock::now();
+        int time = std::chrono::duration_cast<std::chrono::milliseconds>(time2 - time1).count();
+        std::cout << 1000.0/time << std::endl;
     }
 
     return;

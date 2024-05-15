@@ -33,6 +33,7 @@ class Snake
     int last_length = 0;
     int direction = 1;
     bool is_controlled = false;
+    bool is_stupid_bot = false;
     coord head;
     coord tail;
     std::list<coord> body;

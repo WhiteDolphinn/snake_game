@@ -56,7 +56,6 @@ void TView::draw(std::list<Rabbit>& rabbits, std::list<Snake>& snakes)
             std::cout << "snake(human)" << std::to_string(snake_number) << ":" << std::to_string(snake.length) << "##";
         else
             std::cout << "snake(bot)" <<  std::to_string(snake_number) <<  ":" << std::to_string(snake.length) << "##";
-
         snake_number++;
     }
 
@@ -143,8 +142,7 @@ void TView::mainloop()
     struct pollfd input = {0, POLLIN, 0};
     char buf[BUFSIZE] = "";
     
-    int timeout = 1000/FPS;
-    //FILE* logfile = fopen("logfile2.txt", "w");
+    int timeout = 1000/UPS;
     for(int i = 0; i < 10000000; i++)
     {
         if(is_game_goes == false)
@@ -154,15 +152,23 @@ void TView::mainloop()
         int n = poll(&input, 1, timeout);
         auto second_time = std::chrono::system_clock::now();
         int time = std::chrono::duration_cast<std::chrono::milliseconds>(second_time - first_time).count();
-        //fprintf(logfile, "time:%d\n", time);
         timeout -= time;
 
         if(n == 0 || timeout <= 0)
         {
             for(const auto& ontime: ontimes)
-                {  
+                {
+                    static auto third_time1 = std::chrono::system_clock::now();
+                    static auto third_time2 = std::chrono::system_clock::now();
+
                     ontime();
-                    timeout = 1000/FPS;
+                    timeout = 1000/UPS;
+
+                    third_time2 = third_time1;
+                    third_time1 = std::chrono::system_clock::now();
+                    int time2 = std::chrono::duration_cast<std::chrono::milliseconds>(third_time2 - third_time1).count();
+                    gotoxy(0, 3*win_size.first/4);
+                    std::cout << "FPS:" << 1000.0/time2 << std::endl;
                 }
         }
 
@@ -214,6 +220,7 @@ void TView::mainloop()
             }
             buf[0] = '\0';   
         }
+        
     }
 
     bye_print();

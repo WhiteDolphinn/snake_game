@@ -7,7 +7,7 @@
 #include "view.hpp"
 
 const int length_game_name = 15;
-const int FPS = 5;
+const int UPS = 5;
 
 class Model
 {
@@ -39,6 +39,8 @@ class Model
 
         generate_rabbits();
         generate_snakes();
+        auto f = std::bind(&Model::update, this);
+        view.set_ontimes(f);
     }
 
     void set_name(char* buff);

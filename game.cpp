@@ -1,5 +1,6 @@
 #include "game.hpp"
 #include <csignal>
+#include <chrono>
 
 void Model::set_name(char* buff)
 {
@@ -41,6 +42,7 @@ void Model::generate_snakes()
         snake2.length = 2;
         snake2.direction = RIGHT;
         snake2.is_controlled = false;
+        snake2.is_stupid_bot = !(i%3);
         
         int snake_head_first = (rand() % (view.win_size.first-3))+2;
         int snake_head_second = (rand() % (view.win_size.second-3))+2;
@@ -55,6 +57,7 @@ void Model::generate_snakes()
 
 void Model::update()
 {
+    auto current_time = std::chrono::system_clock::now();
     for(auto snake = snakes.begin(); snake != snakes.end(); snake++)
     {
         for(auto rabbit = rabbits.begin(); rabbit != rabbits.end(); rabbit++)
@@ -199,7 +202,6 @@ void Model::set_field()
 
     for(const auto& snake: snakes)
     {
-        //std::cout << "govno1" << std::endl;
         if(snake.head != coord{0,0} && snake.length != 0)
         {
             field[snake.head.first][snake.head.second] = 1;
@@ -209,7 +211,6 @@ void Model::set_field()
 
             field[snake.tail.first][snake.tail.second] = 1;
         }
-        //std::cout << "govno2" << std::endl;
     }
 
     for(const auto& rabbit: rabbits)

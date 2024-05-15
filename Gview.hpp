@@ -14,7 +14,12 @@ class GView : public View
     sf::Texture rabbit_texture;
 
     sf::Sprite snake_body;
-    sf::Texture snake_body_texture;
+    sf::Sprite snake_body_human;
+    sf::Sprite snake_body_stupid_bot;
+    sf::Sprite snake_body_smart_bot;
+    sf::Texture snake_body_texture_human;
+    sf::Texture snake_body_texture_stupid_bot;
+    sf::Texture snake_body_texture_smart_bot;
 
     sf::Sprite snake_head;
     sf::Texture snake_head_texture;
@@ -22,7 +27,7 @@ class GView : public View
     sf::Text text_box;
     sf::Font font;
 
-    unsigned frame = 160;
+    unsigned frame = 200;
 
     public:
     GView();

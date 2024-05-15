@@ -18,7 +18,10 @@ int main(const int argc, const char** argv)
         num_of_rabbits = std::stoi(argv[3]);
 
     if(argc > 4 && argv[4][0] == 'h')
+    {
         is_human = true;
+        
+    }
 
     Model model(*view, num_of_bots, num_of_rabbits, is_human);
 
@@ -27,6 +30,10 @@ int main(const int argc, const char** argv)
 
     for(int i = 0; i < num_of_bots; i++)
         control_list.push_back(std::move(new Control(model, *(current_snake++))));
+
+    if(is_human)
+        control_list.push_back(std::move(new Control(model, *(current_snake++))));
+
 
     view->mainloop();
 
